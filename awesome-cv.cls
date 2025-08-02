@@ -355,19 +355,8 @@
 \newcommand*{\telegram}[1]{\def\@telegram{#1}}
 
 % Defines writer's google scholar profile (optional)
-% Usage: \googlescholar{<googlescholar userid>}{<googlescholar username>}
-% e.g.https://scholar.google.co.uk/citations?user=wpZDx1cAAAAJ
-% would be \googlescholar{wpZDx1cAAAAJ}{Name-to-display-next-icon}
-% If 'googlescholar-name' is not provided than it defaults to
-% '\firstname \lastname'
-\newcommand*{\googlescholar}[2]{%
-  \def\@googlescholarid{#1}%
-  \ifthenelse{\equal{#2}{}}{%
-    \def\@googlescholarname{\@firstname~\@lastname}%
-  }{%
-    \def\@googlescholarname{#2}%
-  }%
-}
+% Usage: \googlescholar{<scholar userID>}{<scholar-displayname>}
+\newcommand*{\googlescholar}[2]{\def\@scholarID{#1}\def\@scholarDisplay{#2}}
 
 % Defines writer's extra information (optional)
 % Usage: \extrainfo{<extra information>}
@@ -505,12 +494,7 @@
           % \mbox prevents wrapping of elements%
           \mbox{\faCakeCandles\acvHeaderIconSep\@dateofbirth}%
         }%
-      \ifthenelse{\isundefined{\@homepage}}%
-        {}%
-        {%
-          \ifbool{isstart}{\setbool{isstart}{false}}{\acvHeaderSocialSep}%
-          \href{http://\@homepage}{\faHouseChimney\acvHeaderIconSep\@homepage}%
-        }%
+        \ifbool{isstart}{}{\\ \setbool{isstart}{true}} % New line for social if phone or email provided
       \ifthenelse{\isundefined{\@github}}%
         {}%
         {%
@@ -534,6 +518,18 @@
         {%
           \ifbool{isstart}{\setbool{isstart}{false}}{\acvHeaderSocialSep}%
           \href{https://stackoverflow.com/users/\@stackoverflowid}{\faStackOverflow\acvHeaderIconSep\@stackoverflowname}%
+        }%
+      \ifthenelse{\isundefined{\@homepage}}%
+        {}%
+        {%
+          \ifbool{isstart}{\setbool{isstart}{false}}{\acvHeaderSocialSep}%
+          \href{https://\@homepage}{\faHouseChimney\acvHeaderIconSep\@homepage}%
+        }%
+        \ifthenelse{\isundefined{\@scholarID}}%
+        {}%
+        {%
+          \ifbool{isstart}{\setbool{isstart}{false}}{\acvHeaderSocialSep}%
+          \href{https://scholar.google.com/citations?user=\@scholarID}{\faGraduationCap\acvHeaderIconSep\@scholarDisplay}%
         }%
       \ifthenelse{\isundefined{\@linkedin}}%
         {}%
@@ -612,12 +608,6 @@
         {%
           \ifbool{isstart}{\setbool{isstart}{false}}{\acvHeaderSocialSep}%
           \href{https://t.me/\@telegram}{\faTelegram\acvHeaderIconSep\@telegram}%
-        }%
-      \ifthenelse{\isundefined{\@googlescholarid}}%
-        {}%
-        {%
-          \ifbool{isstart}{\setbool{isstart}{false}}{\acvHeaderSocialSep}%
-          \href{https://scholar.google.com/citations?user=\@googlescholarid}{\faGraduationCap\acvHeaderIconSep\@googlescholarname}%
         }%
       \ifthenelse{\isundefined{\@extrainfo}}%
         {}%
